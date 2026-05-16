@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThirstTech</title>
+  <style>
+    :root {
+      --bg-dark: #030712;      /* Deep midnight black fallback */
+      --card-bg: rgba(10, 25, 47, 0.4); /* Darker tinted glassmorphism */
+      --nav-bg: rgba(3, 7, 18, 0.7);
+      --accent: #48c7d3;       /* Electric Cyan */
+      --accent-glow: rgba(72, 199, 211, 0.2);
+      --text-main: #f3f4f6;    /* Crisp bright white/gray */
+      --text-muted: #9ca3af;   /* Muted gray */
+    }
+    
+    * {
+      box-sizing: border-box;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #030712; /* Fallback black color while image loads */
+      
+      /* This pulls a crisp, real high-tech space/cyber photo */
+      background-image: url('https://images.unsplash.com/photo-1568952433726-3896e3881c65?w=700&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dGVjaG5vbG9neSUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D');
+      
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed; /* This keeps the image locked in place while you scroll */
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+    
+    header {
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 18px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #ffffff 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .menu {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .menu a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+    }
+    
+    .menu a:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .hero {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(72, 199, 211, 0.02) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 60px;
+      margin-top: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+    }
+    
+    .hero h1 {
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 3rem;
+      font-weight: 800;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      line-height: 1.8;
+    }
+    
+    .section {
+      margin-top: 60px;
+      margin-bottom: 40px;
+    }
+    
+    .section h2 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+    
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 32px;
+    }
+    
+    .service-grid,
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+    }
+    
+    /* Premium Glassmorphism Card Style */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    
+    .card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: rgba(72, 199, 211, 0.5);
+      background: rgba(10, 25, 47, 0.6);
+      box-shadow: 0 30px 60px rgba(72, 199, 211, 0.2);
+    }
+    
+    .card-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      filter: grayscale(20%) brightness(80%);
+    }
+    
+    .card:hover .card-image {
+      filter: grayscale(0%) brightness(100%);
+    }
+    
+    .card-content {
+      padding: 28px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .card-content p {
+      flex-grow: 1; /* Pushes layout elements neatly to the bottom of the card */
+    }
+    
+    .card h3 {
+      margin-top: 0;
+      color: #ffffff;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+    
+    .card p {
+      margin-bottom: 0;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .button {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #030712;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(72, 199, 211, 0.2);
+      text-align: center;
+    }
+    
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(72, 199, 211, 0.4);
+    }
+    
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: none;
+    }
+    
+    .button.secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .contact-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    .contact-list li {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    
+    .contact-list li:hover {
+      border-color: rgba(72, 199, 211, 0.4);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .contact-list li strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #ffffff;
+      font-size: 1.2rem;
+    }
+    
+    .contact-list li p {
+      margin: 0;
+      color: var(--text-muted);
+    }
+    
+    .contact-list li a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .contact-list li a:hover {
+      text-decoration: underline;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 60px;
+      background: rgba(3, 7, 18, 0.6);
+      backdrop-filter: blur(10px);
+    }
+
+    /* AI Floating Chat Widget Styles */
+    .chat-widget {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+    }
+
+    .chat-button {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--accent) 0%, #1a8894 100%);
+      border-radius: 50%;
+      box-shadow: 0 12px 32px rgba(72, 199, 211, 0.4);
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      color: #030712;
+      border: none;
+      outline: none;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(72, 199, 211, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(72, 199, 211, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(72, 199, 211, 0); }
+    }
+
+    .chat-window {
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      width: 330px;
+      height: 400px;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(20px) scale(0.9);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .chat-window.open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .chat-header {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-header .avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+    }
+
+    .chat-header .title {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .chat-body {
+      flex-grow: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      padding: 12px 16px;
+      border-radius: 14px;
+      max-width: 85%;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .message.bot {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .chat-footer {
+      padding: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input {
+      flex-grow: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: white;
+      outline: none;
+    }
+
+    .chat-input:focus {
+      border-color: var(--accent);
+    }
+
+    .send-btn {
+      background: var(--accent);
+      border: none;
+      color: #030712;
+      padding: 0 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+      }
+      
+      nav {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 12px;
+      }
+
+      .menu {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .menu a {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+      }
+      
+      .hero { 
+        padding: 24px 16px; 
+        margin-top: 20px;
+        border-radius: 16px;
+      }
+      
+      .hero h1 { 
+        font-size: 2rem; 
+      }
+
+      .section h2 {
+        font-size: 1.8rem;
+      }
+
+      .service-grid,
+      .project-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .card-content {
+        padding: 20px;
+      }
+
+      .contact-list {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .chat-widget { 
+        bottom: 16px; 
+        right: 16px; 
+      }
+
+      .chat-window { 
+        width: calc(100vw - 32px);
+        height: 380px;
+        bottom: 70px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">ThirstTech</div>
+        <div class="menu">
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" id="about">
+      <h1>Welcome to ThirstTech</h1>
+      <p>ThirstTech is a cutting-edge technology company focused on delivering high-end solutions with a strong commitment to customer satisfaction. We bring together innovation, performance, and reliability to support businesses of all sizes. Our team is dedicated to helping clients thrive through modern web experiences, intelligent automation, and clear communication.</p>
+      <p>From initial discovery to long-term support, we build scalable digital products with a customer-first mindset. Every project is driven by strategic insight, technical expertise, and a goal of delivering measurable value for our clients.</p>
+    </section>
+
+    <section class="section" id="services">
+      <h2>Services We Offer</h2>
+      <p class="section-desc">ThirstTech provides a full suite of digital services for today's fast-moving businesses. We combine technical skill with marketing awareness to help your brand stand out and operate smoothly.</p>
+      <div class="service-grid">
+        <div class="card">
+          <img class="card-image" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60" alt="Landing Pages & Portfolio Sites">
+          <div class="card-content">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Starting at $299</span>
+            <h3>Landing Pages & Portfolio Sites</h3>
+            <p>Tailored for small businesses, restaurants, freelancers, or startups who need a beautiful, fast-loading, and responsive web presence.</p>
+            <div class="button-group">
+              <a class="button" href="#contact" style="width: 100%;">Get a Quote</a>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-image" src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&auto=format&fit=crop&q=60" alt="Lead-Generation Sites">
+          <div class="card-content">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Starting at $499</span>
+            <h3>Lead-Generation Sites</h3>
+            <p>Websites with custom-built forms that securely capture customer inquiries, phone numbers, and project details straight into a centralized database.</p>
+            <div class="button-group">
+              <a class="button" href="#contact" style="width: 100%;">Get a Quote</a>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-image" src="https://images.unsplash.com/photo-1677442136019-21780efad99a?w=500&auto=format&fit=crop&q=60" alt="Interactive Marketing Sites">
+          <div class="card-content">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Starting at $799</span>
+            <h3>Interactive Marketing Sites</h3>
+            <p>Advanced web layouts featuring specialized elements like built-in pricing calculators, dynamic lead capture tools, or interactive FAQ bots.</p>
+            <div class="button-group">
+              <a class="button" href="#contact" style="width: 100%;">Get a Quote</a>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-image" src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=500&auto=format&fit=crop&q=60" alt="Content Writing">
+          <div class="card-content">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Starting at $49</span>
+            <h3>Content Writing</h3>
+            <p>Create well-structured, persuasive copy that communicates your message clearly and helps your audience engage with your business.</p>
+            <div class="button-group">
+              <a class="button" href="#contact" style="width: 100%;">Get a Quote</a>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-image" src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=500&auto=format&fit=crop&q=60" alt="Blogging">
+          <div class="card-content">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Starting at $79/mo</span>
+            <h3>Blogging</h3>
+            <p>Develop engaging blog content that strengthens your brand authority, improves SEO, and keeps visitors coming back for more.</p>
+            <div class="button-group">
+              <a class="button" href="#contact" style="width: 100%;">Get a Quote</a>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-image" src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500&auto=format&fit=crop&q=60" alt="Managing Websites">
+          <div class="card-content">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;">Starting at $149/mo</span>
+            <h3>Managing Websites</h3>
+            <p>Handle updates, security, backups, and performance monitoring so your site remains reliable and secure.</p>
+            <div class="button-group">
+              <a class="button" href="#contact" style="width: 100%;">Get a Quote</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <h2>Completed Projects</h2>
+      <p class="section-desc">Explore a sample of our completed projects below, each delivered with attention to detail and a focus on client success.</p>
+      <div class="project-grid">
+        <div class="card">
+          <img class="card-image" src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=500&auto=format&fit=crop&q=60" alt="Project Alpha">
+          <div class="card-content">
+            <h3>Project Alpha</h3>
+            <p>A responsive business website built for a modern enterprise, including content updates and visual design.</p>
+            <div class="button-group">
+              <a class="button" href="https://example.com/project-alpha" target="_blank" rel="noreferrer">View URL</a>
+              <a class="button secondary" href="https://example.com/project-alpha/demo" target="_blank" rel="noreferrer">Demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-image" src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&auto=format&fit=crop&q=60" alt="Project Beta">
+          <div class="card-content">
+            <h3>Project Beta</h3>
+            <p>An AI-powered website assistant and management system for a growing digital brand.</p>
+            <div class="button-group">
+              <a class="button" href="https://example.com/project-beta" target="_blank" rel="noreferrer">View URL</a>
+              <a class="button secondary" href="https://example.com/project-beta/demo" target="_blank" rel="noreferrer">Demo</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+   <section class="section" id="contact">
+      <h2>Contact Us</h2>
+      <p class="section-desc">Have a project in mind? Drop us a message below, and our team will get back to you instantly. Your submission goes straight into our real-time database.</p>
+      
+      <div class="card" style="max-width: 600px; margin: 0 auto; padding: 30px;">
+        <form id="contactForm" style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label style="font-weight: 600;">Name</label>
+            <input type="text" id="contactName" required class="chat-input" style="width: 100%;" placeholder="John Doe">
+          </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label style="font-weight: 600;">Email Address</label>
+            <input type="email" id="contactEmail" required class="chat-input" style="width: 100%;" placeholder="john@example.com">
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label style="font-weight: 600;">WhatsApp / Phone</label>
+            <input type="tel" id="contactPhone" class="chat-input" style="width: 100%;" placeholder="+92 323 5333112">
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label style="font-weight: 600;">Your Message</label>
+            <textarea id="contactMessage" required class="chat-input" rows="4" style="width: 100%; resize: none; font-family: inherit;" placeholder="Tell us about your project ideas..."></textarea>
+          </div>
+
+          <button type="submit" class="button" style="border: none; cursor: pointer; text-align: center;">Send Message via Supabase</button>
+          <p id="formStatus" style="margin: 0; text-align: center; font-weight: 600; font-size: 0.95rem;"></p>
+        </form>
+      </div>
+
+      <ul class="contact-list" style="margin-top: 40px;">
+        <li>
+          <strong>Message</strong>
+          <p>Start a WhatsApp conversation: <a href="https://wa.me/923235333112" target="_blank">+92 323 5333112</a></p>
+        </li>
+        <li>
+          <strong>Call</strong>
+          <p>Call our WhatsApp line: <a href="tel:+923235333112">+92 323 5333112</a></p>
+        </li>
+        <li>
+          <strong>Email</strong>
+          <p>Send us a direct email: <a href="mailto:info@thirsttech.com">info@thirsttech.com</a></p>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <div class="chat-widget">
+    <button class="chat-button" onclick="toggleChat()">🤖</button>
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-header">
+        <div class="avatar">⚡</div>
+        <div class="title">ThirstTech Agent</div>
+      </div>
+      <div class="chat-body">
+        <div class="message bot">
+          Hello! 👋 I'm the ThirstTech intelligent assistant. How can we help transform your business operations today?
+        </div>
+      </div>
+      <div class="chat-footer">
+        <input type="text" class="chat-input" placeholder="Type a message..." id="chatInput">
+        <button class="send-btn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 ThirstTech. High-end solutions with a customer-first approach.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    // 1. Initializing Supabase (Fixed URL endpoint format)
+    const SUPABASE_URL = 'https://yoypxbrtbvicilctaueh.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlveXB4YnJ0YnZpY2lsY3RhdWVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDc5MjksImV4cCI6MjA5NDQyMzkyOX0.qvVCkb6B0bnR6h5crb-96esWrAKMg7G1bGUKl5oCQuI';
+    
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 2. Real-time form submission hook to Supabase Table
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const statusText = document.getElementById('formStatus');
+      statusText.style.color = 'var(--accent)';
+      statusText.textContent = 'Transmitting data to Supabase...';
+
+      const name = document.getElementById('contactName').value;
+      const email = document.getElementById('contactEmail').value;
+      const phone = document.getElementById('contactPhone').value;
+      const message = document.getElementById('contactMessage').value;
+
+      // Inserting directly into your structured table schema
+      const { error } = await _supabase
+        .from('Messages')
+        .insert([{ name, email, phone, message }]);
+
+      if (error) {
+        statusText.style.color = '#ef4444'; // Error Red
+        statusText.textContent = 'Transmission failed: ' + error.message;
+        console.error(error);
+      } else {
+        statusText.style.color = '#10b981'; // Success Green
+        statusText.textContent = 'Success! Message saved securely in ThirstTech database.';
+        document.getElementById('contactForm').reset();
+      }
+    });
+
+    // Chat Widget toggle function
+    function toggleChat() {
+      const chatWindow = document.getElementById('chatWindow');
+      chatWindow.classList.toggle('open');
+    }
+
+    // Function to append messages to the chat UI
+    function appendMessage(sender, text) {
+      const chatBody = document.querySelector('.chat-body');
+      const msgDiv = document.createElement('div');
+      
+      // Class matches user style or default bot style
+      msgDiv.className = `message ${sender}`;
+      
+      // Add custom styles for the user message to look sleek alongside the bot
+      if (sender === 'user') {
+        msgDiv.style.background = 'var(--accent)';
+        msgDiv.style.color = '#030712';
+        msgDiv.style.alignSelf = 'flex-end';
+        msgDiv.style.borderBottomRightRadius = '4px';
+        msgDiv.style.fontWeight = '500';
+      }
+      
+      msgDiv.textContent = text;
+      chatBody.appendChild(msgDiv);
+      
+      // Auto-scroll to the bottom of the chat
+      chatBody.scrollTop = chatBody.scrollHeight;
+      return msgDiv;
+    }
+
+    // Main send function handles user input and simulates AI thought process
+    async function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+      
+      // 1. Clear input field instantly
+      input.value = '';
+      
+      // 2. Show user's message on screen
+      appendMessage('user', text);
+      
+      // 3. Add a temporary "typing..." indicator for the AI
+      const typingIndicator = appendMessage('bot', '🤖 Agent is thinking...');
+      
+      // 4. Simulate network latency (1.5 seconds) so it feels real
+      setTimeout(() => {
+        // Remove the placeholder typing text
+        typingIndicator.remove();
+        
+        // 5. Generate intelligent response logic based on keywords
+        let aiReply = "I'm processing that request! Could you clarify if you're asking about our web development or web management packages?";
+        const upperText = text.toUpperCase();
+        
+        if (upperText.includes('HELLO') || upperText.includes('HI')) {
+          aiReply = "Hello! 👋 Great to connect with you. What kind of digital tech solution can ThirstTech build for you today?";
+        } else if (upperText.includes('PRICE') || upperText.includes('COST') || upperText.includes('RATE')) {
+          aiReply = "Our pricing is tailored directly to your project scope! Drop your details into the Contact form right behind this chat window, and we will send over a custom quote.";
+        } else if (upperText.includes('SERVICE') || upperText.includes('WORK')) {
+          aiReply = "ThirstTech specializes in high-end Web Development, Website Management, Blogging, and building custom AI Assistants like me!";
+        } else if (
+          upperText.includes('WHATSAPP') || 
+          upperText.includes('PHONE') || 
+          upperText.includes('CALL') || 
+          upperText.includes('CONTACT') || 
+          upperText.includes('TEAM') || 
+          upperText.includes('HELP')
+        ) {
+          aiReply = "You can reach our team instantly! Drop your message in the contact form right behind this chat window to save it to our database, or chat/call us directly at +92 323 5333112.";
+        }
+        
+        // 6. Display the final AI reply
+        appendMessage('bot', aiReply);
+      }, 1500);
+    }
+
+    // Allow user to press 'Enter' instead of just clicking send
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>
